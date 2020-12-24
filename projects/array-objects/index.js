@@ -10,7 +10,10 @@
    forEach([1, 2, 3], (el) => console.log(el))
  */
 function forEach(array, fn) {
-  array.forEach(fn)
+  for (let index = 0; index < array.length; index++) {
+    const element = array[index];
+    fn(element, index, array)
+  }
 }
 /*
  Задание 2:
@@ -23,7 +26,13 @@ function forEach(array, fn) {
  */
 
 function map(array, fn) {
-  return [...array].map(fn);
+  let newArr = [];
+  for (let index = 0; index < array.length; index++) {
+    const element = array[index];
+    newArr.push(fn(element, index, array))
+  }
+  return newArr;
+
 }
 
 /*
@@ -36,11 +45,44 @@ function map(array, fn) {
    reduce([1, 2, 3], (all, current) => all + current) // 6
  */
 function reduce(array, fn, initial) {
-  if (initial !== undefined) {
-    return [...array].reduce(fn, initial);
-  } else {
-    return [...array].reduce(fn);
+  // if (initial !== undefined) {
+  //   return [...array].reduce(fn, initial);
+  // } else {
+  //   return [...array].reduce(fn);
+  // }
+  let result;
+  for (let index = 0; index < array.length; index++) {
+    let element = array[index];
+    let prevElement;
+
+    if (initial !== undefined) {
+      if (index < 1) {
+        prevElement = initial;
+        result = fn(prevElement, element, index, array)
+      }
+      if (index >= 1) {
+        if (index !== array.length) {
+          result = fn(result, element, index, array)
+        }
+      }
+    } else {
+      if (index < 1) {
+        prevElement = array[0]
+        element = array[1]
+        result = fn(prevElement, element, index, array)
+      }
+      if (index >= 1) {
+
+        element = array[index + 1];
+        if (index !== array.length - 1) {
+          result = fn(result, element, index, array)
+        }
+      }
+    }
+
   }
+
+  return result
 }
 
 
