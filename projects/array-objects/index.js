@@ -53,30 +53,24 @@ function reduce(array, fn, initial) {
   let result;
   for (let index = 0; index < array.length; index++) {
     let element = array[index];
-    let prevElement;
 
     if (initial !== undefined) {
       if (index < 1) {
-        prevElement = initial;
-        result = fn(prevElement, element, index, array)
+        result = initial;
+        result = fn(result, element, index, array)
+      } else {
+        result = fn(result, element, index, array)
       }
-      if (index >= 1) {
-        if (index !== array.length) {
-          result = fn(result, element, index, array)
-        }
-      }
-    } else {
+    }
+    else {
       if (index < 1) {
-        prevElement = array[0]
+        index = 1;
+        result = array[0]
         element = array[1]
-        result = fn(prevElement, element, index, array)
+        result = fn(result, element, index, array)
       }
-      if (index >= 1) {
-
-        element = array[index + 1];
-        if (index !== array.length - 1) {
-          result = fn(result, element, index, array)
-        }
+      else {
+        result = fn(result, element, index, array)
       }
     }
 
