@@ -45,35 +45,18 @@ function map(array, fn) {
    reduce([1, 2, 3], (all, current) => all + current) // 6
  */
 function reduce(array, fn, initial) {
-  // if (initial !== undefined) {
-  //   return [...array].reduce(fn, initial);
-  // } else {
-  //   return [...array].reduce(fn);
-  // }
   let result;
-  for (let index = 0; index < array.length; index++) {
+  let index;
+  if (initial !== undefined) {
+    index = 0
+    result = initial;
+  } else {
+    index = 1
+    result = array[index-1]
+  }
+  for (index; index < array.length; index++) {
     let element = array[index];
-
-    if (initial !== undefined) {
-      if (index < 1) {
-        result = initial;
-        result = fn(result, element, index, array)
-      } else {
-        result = fn(result, element, index, array)
-      }
-    }
-    else {
-      if (index < 1) {
-        index = 1;
-        result = array[0]
-        element = array[1]
-        result = fn(result, element, index, array)
-      }
-      else {
-        result = fn(result, element, index, array)
-      }
-    }
-
+    result = fn(result, element, index, array)
   }
 
   return result
