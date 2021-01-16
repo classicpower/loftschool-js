@@ -116,7 +116,7 @@ filterInput.addEventListener('input', function () {
 
         }
       }
-    }).catch(error(true))
+    }).catch(() => { error(true) })
   }
 
   function createTownNode(town) {
