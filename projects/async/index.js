@@ -41,7 +41,7 @@ const homeworkContainer = document.querySelector('#app');
  https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json
  */
 function loadTowns() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     loadAndSortTowns().then(towns => resolve(towns))
   })
 }
