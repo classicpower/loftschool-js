@@ -51,7 +51,7 @@ export function createDiv() {
   div.style.left = `${divPos.left}px`;
   div.style.height = `${divParams.h}px`;
   div.style.width = `${divParams.w}px`;
-  div.style.backgroundColor = `rgba(${bcg.red},${bcg.green},${bcg.blue})`;
+  div.style.backgroundColor = `rgb(${bcg.red},${bcg.green},${bcg.blue})`;
   homeworkContainer.appendChild(div)
 
   div.addEventListener('mousedown', function (e) {
@@ -85,6 +85,8 @@ export function createDiv() {
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
+
+  return div
 }
 
 const addDivButton = homeworkContainer.querySelector('#addDiv');
