@@ -41,9 +41,7 @@ const homeworkContainer = document.querySelector('#app');
  https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json
  */
 function loadTowns() {
-  return new Promise((resolve) => {
-    loadAndSortTowns().then(towns => resolve(towns))
-  })
+  return loadAndSortTowns()
 }
 
 /*
@@ -74,58 +72,48 @@ const filterInput = homeworkContainer.querySelector('#filter-input');
 /* Блок с результатами поиска */
 const filterResult = homeworkContainer.querySelector('#filter-result');
 
+let towns = [];
 loadingFailedBlock.classList.add('hidden');
-loadingBlock.classList.add('hidden');
+filterBlock.classList.add('hidden');
 
 retryButton.addEventListener('click', () => {
-  error(false)
+  error()
 });
 
-function error(status) {
-  if (status) {
+async function error() {
+  try {
+    towns = await loadTowns()
     loadingBlock.classList.add('hidden');
-    filterBlock.classList.add('hidden');
-    loadingFailedBlock.classList.remove('hidden');
-  } else {
-    clearInput()
-    filterBlock.classList.remove('hidden');
     loadingFailedBlock.classList.add('hidden');
-  }
-}
-function clearInput() {
-  filterInput.value = '';
-}
-filterInput.addEventListener('input', function () {
-  loadingBlock.classList.remove('hidden');
-  const value = this.value;
-  filterResult.innerHTML = '';
-  if (value === '') {
-    filterResult.innerHTML = '';
+    filterBlock.classList.remove('hidden');
+  } catch (e) {
     loadingBlock.classList.add('hidden');
-  } else {
-    loadTowns().then(towns => {
-      loadingFailedBlock.classList.add('hidden');
-      for (const town of towns) {
-        if (isMatching(town.name, value)) {
-          filterResult.classList.remove('hidden');
-          loadingBlock.classList.add('hidden');
-          const townNode = createTownNode(town.name);
-          filterResult.appendChild(townNode);
-        } else {
-          loadingBlock.classList.add('hidden');
+    loadingFailedBlock.classList.remove('hidden');
 
-        }
-      }
-    }).catch(() => { error(true) })
   }
 
-  function createTownNode(town) {
-    const div = document.createElement('div');
-    div.classList.add('town');
-    div.textContent = `${town}`;
-    return div;
+}
+error()
+
+filterInput.addEventListener('input', function () {
+  filterResult.innerHTML = '';
+  const value = this.value;
+  for (const town of towns) {
+    if (value && isMatching(town.name, value)) {
+      const townNode = createTownNode(town.name);
+      filterResult.appendChild(townNode);
+    }
   }
 
 });
+
+function createTownNode(town) {
+  const fragment = document.createDocumentFragment()
+  const div = document.createElement('div');
+  div.classList.add('town');
+  div.textContent = `${town}`;
+  fragment.appendChild(div);
+  return fragment;
+}
 
 export { loadTowns, isMatching };
